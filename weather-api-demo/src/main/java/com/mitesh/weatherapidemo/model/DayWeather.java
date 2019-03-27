@@ -1,20 +1,24 @@
 package com.mitesh.weatherapidemo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DayWeather {
 
-	private double maxtemp_c;
-	private double mintemp_c;
-	public double getMaxtemp_c() {
-		return maxtemp_c;
+	@JsonProperty(value = "maxtemp_c")
+	private double maxtempc;
+	@JsonProperty(value = "mintemp_c")
+	private double mintempc;
+	public double getMaxtempc() {
+		return maxtempc;
 	}
-	public void setMaxtemp_c(double maxtemp_c) {
-		this.maxtemp_c = maxtemp_c;
+	public void setMaxtempc(double maxtempc) {
+		this.maxtempc = maxtempc;
 	}
-	public double getMintemp_c() {
-		return mintemp_c;
+	public double getMintempc() {
+		return mintempc;
 	}
-	public void setMintemp_c(double mintemp_c) {
-		this.mintemp_c = mintemp_c;
+	public void setMintempc(double mintempc) {
+		this.mintempc = mintempc;
 	}
 	
 }

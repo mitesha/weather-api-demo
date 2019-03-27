@@ -1,5 +1,7 @@
 package com.mitesh.weatherapidemo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Location {
 
 	private String name;
@@ -8,7 +10,17 @@ public class Location {
 	private double lat;
 	private double lon;
 	private String localtime;
-	private String tz_id;
+	
+	@JsonProperty(value="tz_id")
+	private String tzId;
+	public String getTzId() {
+		return tzId;
+	}
+
+	public void setTzId(String tzId) {
+		this.tzId = tzId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -47,14 +59,6 @@ public class Location {
 
 	public void setLocaltime(String localtime) {
 		this.localtime = localtime;
-	}
-
-	public String getTz_id() {
-		return tz_id;
-	}
-
-	public void setTz_id(String tz_id) {
-		this.tz_id = tz_id;
 	}
 
 }

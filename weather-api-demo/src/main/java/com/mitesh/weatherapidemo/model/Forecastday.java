@@ -2,25 +2,31 @@ package com.mitesh.weatherapidemo.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Forecastday {
 
-	public Forecastday() {
-		
-	}
-	
+	private Date date;
+
+	@JsonProperty(value = "date_epoch")
+	private Long dateEpoch;
+	private DayWeather day;
+	private Astro astro;
+
 	public Date getDate() {
-		return date;
+		if(null == date) {
+			return null;
+		}else {
+			return new Date(date.getTime());
+		}
 	}
+
 	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public Long getDate_epoch() {
-		return date_epoch;
-	}
-
-	public void setDate_epoch(Long date_epoch) {
-		this.date_epoch = date_epoch;
+		if (null == date) {
+			this.date = null;
+		} else {
+			this.date = new Date(date.getTime());
+		}
 	}
 
 	public DayWeather getDay() {
@@ -39,10 +45,4 @@ public class Forecastday {
 		this.astro = astro;
 	}
 
-	private Date date;
-	private Long date_epoch;
-	private DayWeather day;
-	private Astro astro;
-	
-	
 }

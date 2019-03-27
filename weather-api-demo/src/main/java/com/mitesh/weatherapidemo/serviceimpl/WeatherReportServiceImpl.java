@@ -11,10 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.mitesh.weatherapidemo.common.WeatherApiException;
+import com.mitesh.weatherapidemo.common.WeatherReportEnum;
 import com.mitesh.weatherapidemo.config.WeatherApiConfig;
 import com.mitesh.weatherapidemo.model.WeatherReportDTO;
 import com.mitesh.weatherapidemo.service.WeatherReportService;
 
+/**
+ * Service Implementation for WeatherReportService.
+ * @author miteshanand
+ *
+ */
 @Service
 public class WeatherReportServiceImpl implements WeatherReportService {
 
@@ -22,22 +28,6 @@ public class WeatherReportServiceImpl implements WeatherReportService {
 
 	@Autowired
 	private WeatherApiConfig weatherApiConfig;
-
-	public WeatherReportDTO getWeaterForecastReport(String region, Integer days) {
-		LOGGER.info("Fetch Weatherforecast report for region {}", region);
-		String uri = weatherApiConfig.getBaseUrl() +"/forecast.json?key=" + 
-						weatherApiConfig.getKey() + "&q=" + region + "&days="+days;
-		ResponseEntity<WeatherReportDTO> response = fetchDataFromApi(uri);
-		return response.getBody();
-	}
-
-	public WeatherReportDTO getCurrentWeatherReport(String region) {
-		LOGGER.info("Fetch Weatherforecast report for region {}", region);
-		String uri = weatherApiConfig.getBaseUrl() +"/current.json?key=" 
-						+ weatherApiConfig.getKey() + "&q=" + region;
-		ResponseEntity<WeatherReportDTO> response = fetchDataFromApi(uri);
-		return response.getBody();
-	}
 	
 	private ResponseEntity<WeatherReportDTO> fetchDataFromApi(String uri) {
 		RestTemplate restTemplate = new RestTemplate();
@@ -51,5 +41,31 @@ public class WeatherReportServiceImpl implements WeatherReportService {
 			throw new WeatherApiException("Error while fetching data from Weather API");  // should handle using custom exception.
 		}
 		return response;
+	}
+
+	@Override
+	public WeatherReportDTO getWeatherReportData(WeatherReportEnum reportEnum, String region, Integer days) {
+		LOGGER.info("Fetch weather {} report for region {} for days {}",reportEnum, region, days);
+		StringBuilder builder = new StringBuilder();
+		builder.append(weatherApiConfig.getBaseUrl());
+		switch (reportEnum) {
+		case FORECAST:
+			builder.append("/forecast.json?key=");
+			break;
+		case TODAY:
+			builder.append("/current.json?key=");
+			days = WeatherReportEnum.TODAY.getDays(); //make sure no one set days in request
+			break;
+		default:
+			break;
+		}
+		builder.append(weatherApiConfig.getKey());
+		builder.append("&q=");
+		builder.append(region);
+		builder.append("&days=");
+		builder.append(days);
+		
+		ResponseEntity<WeatherReportDTO> response = fetchDataFromApi(builder.toString());
+		return response.getBody();
 	}
 }

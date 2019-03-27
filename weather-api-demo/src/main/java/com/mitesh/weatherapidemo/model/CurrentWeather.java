@@ -1,30 +1,19 @@
 package com.mitesh.weatherapidemo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CurrentWeather {
 
-	private String wind_dir;
-	private String pressure_in;
-	private String precip_mm;
+	@JsonProperty(value="wind_dir")
+	private String windDir;
+	
+	@JsonProperty(value="pressure_in")
+	private String pressureIn;
+	
+	@JsonProperty(value="precip_mm")
+	private String precipMm;
 	private Integer humidity;
 	private Integer cloud;
-	public String getWind_dir() {
-		return wind_dir;
-	}
-	public void setWind_dir(String wind_dir) {
-		this.wind_dir = wind_dir;
-	}
-	public String getPressure_in() {
-		return pressure_in;
-	}
-	public void setPressure_in(String pressure_in) {
-		this.pressure_in = pressure_in;
-	}
-	public String getPrecip_mm() {
-		return precip_mm;
-	}
-	public void setPrecip_mm(String precip_mm) {
-		this.precip_mm = precip_mm;
-	}
 	public Integer getHumidity() {
 		return humidity;
 	}
@@ -33,6 +22,24 @@ public class CurrentWeather {
 	}
 	public Integer getCloud() {
 		return cloud;
+	}
+	public String getWindDir() {
+		return windDir;
+	}
+	public void setWindDir(String windDir) {
+		this.windDir = windDir;
+	}
+	public String getPressureIn() {
+		return pressureIn;
+	}
+	public void setPressureIn(String pressureIn) {
+		this.pressureIn = pressureIn;
+	}
+	public String getPrecipMm() {
+		return precipMm;
+	}
+	public void setPrecipMm(String precipMm) {
+		this.precipMm = precipMm;
 	}
 	public void setCloud(Integer cloud) {
 		this.cloud = cloud;

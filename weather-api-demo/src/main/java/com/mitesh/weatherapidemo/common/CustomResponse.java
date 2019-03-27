@@ -1,11 +1,18 @@
 package com.mitesh.weatherapidemo.common;
 
-public class CustomResponse {
+import com.mitesh.weatherapidemo.model.WeatherReportDTO;
 
-	public Object getData() {
+public class CustomResponse {
+	
+	private WeatherReportDTO data;
+	private int statusCode; // 0 fail 1 success
+	private String status;
+	private String err;
+
+	public WeatherReportDTO getData() {
 		return data;
 	}
-	public void setData(Object data) {
+	public void setData(WeatherReportDTO data) {
 		this.data = data;
 	}
 	public int getStatusCode() {
@@ -26,8 +33,5 @@ public class CustomResponse {
 	public void setErr(String err) {
 		this.err = err;
 	}
-	Object data;
-	private int statusCode; // 0 fail 1 success
-	private String status;
-	private String err;
+	
 }

@@ -1,6 +1,5 @@
 package com.mitesh.weatherapidemo;
 
-import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mitesh.weatherapidemo.common.CustomResponse;
+import com.mitesh.weatherapidemo.model.WeatherReportDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = WeatherApiDemoApplication.class, 
@@ -30,18 +30,6 @@ public class WeatherApiDemoApplicationTests {
 
 	HttpHeaders headers = new HttpHeaders();
 	
-	@Test
-	public void testCurrentWeatherReport() throws JSONException {
-		HttpEntity<String> entity = new HttpEntity<>(null, headers);
-		ResponseEntity<CustomResponse> response = restTemplate.exchange(
-				createURLWithPort("/current/india"),
-				HttpMethod.GET, entity, CustomResponse.class);
-
-		CustomResponse customResponse = response.getBody();
-		Assert.assertTrue(customResponse.getStatus().equals("SUCCESS"));
-		Assert.assertTrue(customResponse.getData() != null);
-	}
-	
 	private String createURLWithPort(String uri) {
 		String url = "http://localhost:" + port + uri;
 		LOGGER.info(" URL Generated is {} " ,url);
@@ -49,7 +37,38 @@ public class WeatherApiDemoApplicationTests {
 	}
 	
 	@Test
-	public void testForecastReport() throws JSONException {
+	public void testCurrentWeatherReport() {
+		HttpEntity<String> entity = new HttpEntity<>(null, headers);
+		ResponseEntity<CustomResponse> response = restTemplate.exchange(
+				createURLWithPort("/today/india"),
+				HttpMethod.GET, entity, CustomResponse.class);
+
+		CustomResponse customResponse = response.getBody();
+		Assert.assertTrue(customResponse.getStatus().equals("SUCCESS"));
+		Assert.assertTrue(customResponse.getData() != null);
+		
+		WeatherReportDTO reportDTO = customResponse.getData();
+		Assert.assertEquals("New Delhi", reportDTO.getLocation().getName());
+	}
+	
+	@Test
+	public void testForecastReport() {
+		HttpEntity<String> entity = new HttpEntity<>(null, headers);
+		ResponseEntity<CustomResponse> response = restTemplate.exchange(
+				createURLWithPort("/forecast/india?days=5"),
+				HttpMethod.GET, entity, CustomResponse.class);
+
+		CustomResponse customResponse = response.getBody();
+		Assert.assertTrue(customResponse.getData() != null);
+		
+		WeatherReportDTO reportDTO = customResponse.getData();
+		Assert.assertEquals("New Delhi", reportDTO.getLocation().getName());
+		LOGGER.info("Size forecast days {}", reportDTO.getForecast().getForecastday().size());
+		Assert.assertTrue(reportDTO.getForecast().getForecastday().size() == 5);
+	}
+	
+	@Test
+	public void testForecastReportWithoutDays() {
 		HttpEntity<String> entity = new HttpEntity<>(null, headers);
 		ResponseEntity<CustomResponse> response = restTemplate.exchange(
 				createURLWithPort("/forecast/india"),
@@ -57,5 +76,10 @@ public class WeatherApiDemoApplicationTests {
 
 		CustomResponse customResponse = response.getBody();
 		Assert.assertTrue(customResponse.getData() != null);
+		
+		WeatherReportDTO reportDTO = customResponse.getData();
+		Assert.assertEquals("New Delhi", reportDTO.getLocation().getName());
+		LOGGER.info("Size forecast days {}", reportDTO.getForecast().getForecastday().size());
+		Assert.assertTrue(reportDTO.getForecast().getForecastday().size() == 1);
 	}
 }
